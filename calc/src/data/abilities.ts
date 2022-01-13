@@ -209,6 +209,25 @@ const XY = BW.concat([
   'Sweet Veil',
   'Symbiosis',
   'Tough Claws',
+  // uranium abilities start here
+  'Sharp Coral',
+  'Lazy',
+  'Rebuild',
+  'Petrify',
+  'Infuriate',
+  'Elementalist',
+  'Energizate',
+  'Acceleration',
+  'Blood Lust',
+  'Atomizate',
+  'Lead Skin',
+  'Deep Freeze',
+  'Stormbringer',
+  'Quick Charge',
+  'Sound Boost',
+  'Disenchant',
+  'Geiger Sense',
+  'Chernobyl',
 ]);
 
 const SM = XY.concat([

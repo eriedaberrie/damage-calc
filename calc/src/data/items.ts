@@ -343,6 +343,21 @@ export const MEGA_STONES: {[species: string]: string} = {
   Swampertite: 'Swampert',
   Tyranitarite: 'Tyranitar',
   Venusaurite: 'Venusaur',
+  Metalynxite: 'Metalynx',
+  Archillesite: 'Archilles',
+  Electruxolite: 'Electruxo',
+  Baariettite: 'Baariette',
+  'Nuclear Baariettite': 'Baariette-Nuclear',
+  Drilgannite: 'Drilgann',
+  Inflagetite: 'Inflagetah',
+  Dramsamaite: 'Dramsama',
+  Syrentideite: 'Syrentide',
+  'Unidentified Fallen Object': 'S51-A',
+  Kiricornite: 'Kiricorn',
+  Whimsicottite: 'Whimsicott',
+  Arbokite: 'Arbok',
+  'Nuclear Arbokite': 'Nuclear Arbok',
+  'Nuclear Gyaradosite': 'Nuclear Gyarados',
 };
 
 const XY = BW.concat(
@@ -364,6 +379,12 @@ const XY = BW.concat(
     'Snowball',
     'Weakness Policy',
     'Whipped Dream',
+    // uranium items start here
+    'Hafli Berry',
+    'Coconut Milk',
+    'Carrot Wine',
+    'Jungle Crown',
+    'Aromatic Herb',
   ].sort()
 );
 
@@ -548,6 +569,7 @@ const BERRIES: {[berry: string]: {t: I.TypeName; p: number}} = {
   'Wepear Berry': {t: 'Electric', p: 90},
   'Wiki Berry': {t: 'Rock', p: 80},
   'Yache Berry': {t: 'Ice', p: 80},
+  'Hafli Berry': {t: 'Nuclear', p: 80},
 };
 
 export const ITEMS = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS];

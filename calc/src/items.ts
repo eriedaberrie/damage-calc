@@ -21,6 +21,7 @@ export function getItemBoostType(item: string | undefined) {
     return 'Ground';
   case 'Fist Plate':
   case 'Black Belt':
+  case 'Jungle Crown':
     return 'Fighting';
   case 'Flame Plate':
   case 'Charcoal':
@@ -112,6 +113,8 @@ export function getBerryResistType(berry: string | undefined) {
     return 'Steel';
   case 'Roseli Berry':
     return 'Fairy';
+  case 'Hafli Berry':
+    return 'Nuclear';
   default:
     return undefined;
   }

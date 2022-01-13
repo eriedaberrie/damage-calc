@@ -22,6 +22,7 @@ import {
   checkForecast,
   checkInfiltrator,
   checkIntimidate,
+  checkPetrify,
   checkIntrepidSword,
   checkItem,
   checkMultihitBoost,
@@ -68,6 +69,8 @@ export function calculateSMSS(
 
   checkIntimidate(gen, attacker, defender);
   checkIntimidate(gen, defender, attacker);
+  checkPetrify(gen, attacker, defender);
+  checkPetrify(gen, defender, attacker);
   checkDownload(attacker, defender, field.isWonderRoom);
   checkDownload(defender, attacker, field.isWonderRoom);
   checkIntrepidSword(attacker);
@@ -143,6 +146,8 @@ export function calculateSMSS(
       : field.hasWeather('Rain', 'Heavy Rain') && !holdingUmbrella ? 'Water'
       : field.hasWeather('Sand') ? 'Rock'
       : field.hasWeather('Hail') ? 'Ice'
+      : field.hasWeather('Thunderstorm') ? 'Electric'
+      : field.hasWeather('Toxic Fallout') ? 'Nuclear'
       : 'Normal';
     desc.weather = field.weather;
     desc.moveType = type;
@@ -184,6 +189,8 @@ export function calculateSMSS(
   let isPixilate = false;
   let isRefrigerate = false;
   let isGalvanize = false;
+  let isEnergizate = false;
+  let isAtomizate = false;
   let isLiquidVoice = false;
   let isNormalize = false;
   const noTypeChange = move.named(
@@ -209,10 +216,14 @@ export function calculateSMSS(
       type = 'Fairy';
     } else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
       type = 'Ice';
+    } else if ((isEnergizate = attacker.hasAbility('Energizate') && normal)) {
+      type = 'Electric';
+    } else if ((isAtomizate = attacker.hasAbility('Atomizate') && normal)) {
+      type = 'Nuclear';
     } else if ((isNormalize = attacker.hasAbility('Normalize'))) { // Boosts any type
       type = 'Normal';
     }
-    if (isGalvanize || isPixilate || isRefrigerate || isAerilate || isNormalize) {
+    if (isGalvanize || isPixilate || isRefrigerate || isAerilate || isEnergizate || isAtomizate || isNormalize) {
       desc.attackerAbility = attacker.ability;
       hasAteAbilityTypeChange = true;
     } else if (isLiquidVoice) {
@@ -236,7 +247,7 @@ export function calculateSMSS(
   const type2Effectiveness = defender.types[1]
     ? getMoveEffectiveness(gen, move, defender.types[1], isGhostRevealed, field.isGravity)
     : 1;
-  let typeEffectiveness = type1Effectiveness * type2Effectiveness;
+  let typeEffectiveness = (move.named('Infernal Blade') && defender.hasType('Fairy')) ? 2 : type1Effectiveness * type2Effectiveness;
 
   if (typeEffectiveness === 0 && move.named('Thousand Arrows')) {
     typeEffectiveness = 1;
@@ -283,6 +294,8 @@ export function calculateSMSS(
       (move.hasType('Ground') &&
         !field.isGravity && !move.named('Thousand Arrows') &&
         !defender.hasItem('Iron Ball') && defender.hasAbility('Levitate')) ||
+      (move.hasType('Nuclear') && defender.hasAbility('Lead Skin')) ||
+      (move.hasType('Fire') && defender.hasAbility('Disenchant')) ||
       (move.flags.bullet && defender.hasAbility('Bulletproof')) ||
       (move.flags.sound && !move.named('Clangorous Soul') && defender.hasAbility('Soundproof')) ||
       (move.priority > 0 && defender.hasAbility('Queenly Majesty', 'Dazzling'))
@@ -417,7 +430,8 @@ export function calculateSMSS(
   const noWeatherBoost = defender.hasItem('Utility Umbrella');
   if (!noWeatherBoost && (field.hasWeather('Sun', 'Harsh Sunshine') &&
         move.hasType('Fire')) ||
-       (field.hasWeather('Rain', 'Heavy Rain') && move.hasType('Water'))) {
+       (field.hasWeather('Rain', 'Heavy Rain') && move.hasType('Water')) ||
+       (field.hasWeather('Thunderstorm') && move.hasType('Electric'))) {
     baseDamage = pokeRound(OF32(baseDamage * 6144) / 4096);
     desc.weather = field.weather;
   } else if (!noWeatherBoost &&
@@ -425,6 +439,12 @@ export function calculateSMSS(
     (field.hasWeather('Rain') && move.hasType('Fire'))
   ) {
     baseDamage = pokeRound(OF32(baseDamage * 2048) / 4096);
+    desc.weather = field.weather;
+  } else if (
+    field.hasWeather('Toxic Fallout') && defender.hasType('Nuclear') &&
+    typeEffectiveness > 1
+  ) {
+    baseDamage = pokeRound(OF32(baseDamage * 3072) / 4096);
     desc.weather = field.weather;
   } else if (!noWeatherBoost &&
     (field.hasWeather('Harsh Sunshine') && move.hasType('Water')) ||
@@ -790,7 +810,7 @@ export function calculateBPModsSMSS(
     bpMods.push(6144);
     desc.moveBP = basePower * 1.5;
   } else if (move.named('Solar Beam', 'Solar Blade') &&
-      field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail')) {
+      field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail', 'Thunderstorm', 'Toxic Fallout')) {
     bpMods.push(2048);
     desc.moveBP = basePower / 2;
     desc.weather = field.weather;
@@ -866,7 +886,7 @@ export function calculateBPModsSMSS(
       (attacker.hasAbility('Analytic') &&
         (turnOrder !== 'first' || field.defenderSide.isSwitching === 'out')) ||
       (attacker.hasAbility('Tough Claws') && move.flags.contact) ||
-      (attacker.hasAbility('Punk Rock') && move.flags.sound)
+      (attacker.hasAbility('Punk Rock', 'Sound Boost') && move.flags.sound)
   ) {
     bpMods.push(5325);
     desc.attackerAbility = attacker.ability;
@@ -897,6 +917,21 @@ export function calculateBPModsSMSS(
   // However, Max Moves also don't boost -ate Abilities
   if (!move.isMax && hasAteAbilityTypeChange) {
     bpMods.push(4915);
+  }
+  
+  if (attacker.hasAbility('Acceleration') && move.priority > 0) {
+    bpMods.push(6144);
+    desc.attackerAbility = attacker.ability;
+  }
+  
+  if (attacker.hasAbility('Sharp Coral')) {
+    bpMods.push(8192);
+    desc.attackerAbility = attacker.ability;
+  }
+  
+  if (defender.hasAbility('Sharp Coral')) {
+    bpMods.push(8192);
+    desc.defenderAbility = defender.ability;
   }
 
   if ((attacker.hasAbility('Reckless') && (move.recoil || move.hasCrashDamage)) ||
@@ -1046,7 +1081,8 @@ export function calculateAtModsSMSS(
   } else if (
     (attacker.hasAbility('Steelworker') && move.hasType('Steel')) ||
     (attacker.hasAbility('Dragon\'s Maw') && move.hasType('Dragon')) ||
-    (attacker.hasAbility('Transistor') && move.hasType('Electric'))
+    (attacker.hasAbility('Transistor') && move.hasType('Electric')) ||
+    (attacker.hasAbility('Elementalist') && move.hasType('Fire', 'Water', 'Electric'))
   ) {
     atMods.push(6144);
     desc.attackerAbility = attacker.ability;

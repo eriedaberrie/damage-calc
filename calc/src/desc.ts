@@ -114,6 +114,13 @@ export function getRecovery(
       recovery[1] += Math.min(Math.round(maxD[i] * move.hits / 8), max);
     }
   }
+  if (attacker.hasAbility('Blood Lust') && !ignoresShellBell) {
+    const max = Math.round(defender.maxHP() / 8);
+    for (let i = 0; i < minD.length; i++) {
+      recovery[0] += Math.min(Math.round(minD[i] * move.hits / 8), max);
+      recovery[1] += Math.min(Math.round(maxD[i] * move.hits / 8), max);
+    }
+  }
 
   if (move.named('G-Max Finale')) {
     recovery[0] = recovery[1] = Math.round(attacker.maxHP() / 6);
@@ -419,6 +426,7 @@ function combine(damage: Damage) {
 const TRAPPING = [
   'Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb',
   'Thunder Cage', 'Whirlpool', 'Wrap', 'G-Max Sandblast', 'G-Max Centiferno',
+  'Metal Whip', 'Ocean\'s Wrath',
 ];
 
 function getHazards(gen: Generation, defender: Pokemon, defenderSide: Side) {
@@ -515,6 +523,29 @@ function getEndOfTurn(
     ) {
       damage -= Math.floor(defender.maxHP() / 16);
       texts.push('hail damage');
+    }
+  } else if (!field.isWeatherOff) {
+    if (field.hasWeather('Thunderstorm')) {
+      if (
+        !defender.hasType('Electric') &&
+        !defender.hasAbility('Volt Absorb', 'Motor Drive', 'Lightning Rod')
+      ) {
+        const eff = gen.types.get('electric' as ID)!.effectiveness[defender.types[0]]! *
+          (defender.types[1] ? gen.types.get('electric' as ID)!.effectiveness[defender.types[1]]! : 1)
+        damage -= Math.floor(defender.maxHP() * eff / 8)
+        texts.push('thunderstorm damage');
+      }
+    } else if (field.hasWeather('Toxic Fallout')) {
+      if (
+        !defender.hasType('Nuclear') && !defender.hasType('Steel') &&
+        !defender.hasAbility('Lead Skin') &&
+        !defender.hasItem('Safety Goggles')
+      ) {
+        const eff = gen.types.get('nuclear' as ID)!.effectiveness[defender.types[0]]! *
+          (defender.types[1] ? gen.types.get('nuclear' as ID)!.effectiveness[defender.types[1]]! : 1)
+        damage -= Math.floor(defender.maxHP() * eff / 8)
+        texts.push('fallout damage');
+      }
     }
   }
 

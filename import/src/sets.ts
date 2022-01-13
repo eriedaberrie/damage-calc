@@ -8,6 +8,7 @@ const toID = calc.toID;
 
 // prettier-ignore
 const TIERS = [
+  'Gamma', 'Beta', 'Alpha', 'CanonUber',
   'LC', 'NFE', 'UU', 'OU', 'Uber', 'NU', 'NUBL', 'UUBL', 'CAP', 'LC Uber', 'CAP LC',
   'CAP NFE', 'RU', 'RUBL', 'PU', '(PU)', 'PUBL', '(OU)', 'AG', '(Uber)', 'Illegal',
 ] as const;

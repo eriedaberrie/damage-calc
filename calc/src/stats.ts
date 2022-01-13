@@ -13,30 +13,31 @@ const SS: StatID[] = GSC;
 export const STATS: Array<Array<StatID | 'spc'> | StatID[]> =
   [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS];
 
-type HPTypeName = Exclude<TypeName, 'Normal' | 'Fairy' | '???'>;
+type HPTypeName = Exclude<TypeName, 'Normal' | 'Nuclear' | '???'>;
 
 const HP_TYPES = [
   'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
-  'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
+  'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy',
 ];
 
 const HP: {[type in HPTypeName]: {ivs: Partial<StatsTable>; dvs: Partial<StatsTable>}} = {
-  Bug: {ivs: {atk: 30, def: 30, spd: 30}, dvs: {atk: 13, def: 13}},
-  Dark: {ivs: {}, dvs: {}},
-  Dragon: {ivs: {atk: 30}, dvs: {def: 14}},
+  Bug: {ivs: {spd: 30, spe: 30}, dvs: {atk: 13, def: 13}},
+  Dark: {ivs: {atk: 30}, dvs: {}},
+  Dragon: {ivs: {def: 30}, dvs: {def: 14}},
   Electric: {ivs: {spa: 30}, dvs: {atk: 14}},
   Fighting: {ivs: {def: 30, spa: 30, spd: 30, spe: 30}, dvs: {atk: 12, def: 12}},
-  Fire: {ivs: {atk: 30, spa: 30, spe: 30}, dvs: {atk: 14, def: 12}},
-  Flying: {ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30}, dvs: {atk: 12, def: 13}},
+  Fire: {ivs: {def: 30, spa: 30, spe: 30}, dvs: {atk: 14, def: 12}},
+  Flying: {ivs: {spa: 30, spd: 30, spe: 30}, dvs: {atk: 12, def: 13}},
   Ghost: {ivs: {def: 30, spd: 30}, dvs: {atk: 13, def: 14}},
-  Grass: {ivs: {atk: 30, spa: 30}, dvs: {atk: 14, def: 14}},
+  Grass: {ivs: {def: 30, spa: 30}, dvs: {atk: 14, def: 14}},
   Ground: {ivs: {spa: 30, spd: 30}, dvs: {atk: 12}},
-  Ice: {ivs: {atk: 30, def: 30}, dvs: {def: 13}},
+  Ice: {ivs: {spe: 30}, dvs: {def: 13}},
   Poison: {ivs: {def: 30, spa: 30, spd: 30}, dvs: {atk: 12, def: 14}},
-  Psychic: {ivs: {atk: 30, spe: 30}, dvs: {def: 12}},
+  Psychic: {ivs: {def: 30, spe: 30}, dvs: {def: 12}},
   Rock: {ivs: {def: 30, spd: 30, spe: 30}, dvs: {atk: 13, def: 12}},
   Steel: {ivs: {spd: 30}, dvs: {atk: 13}},
-  Water: {ivs: {atk: 30, def: 30, spa: 30}, dvs: {atk: 14, def: 13}},
+  Water: {ivs: {spd: 30, spe: 30}, dvs: {atk: 14, def: 13}},
+  Fairy: {ivs: {}, dvs: {}},
 };
 
 export const Stats = new (class {
@@ -203,7 +204,7 @@ export const Stats = new (class {
         i *= 2;
       }
       return {
-        type: HP_TYPES[tr(hpTypeX * 15 / 63)] as TypeName,
+        type: HP_TYPES[tr(hpTypeX * 16 / 63)] as TypeName,
         // After Gen 6, Hidden Power is always 60 base power
         power: (gen.num && gen.num < 6) ? tr(hpPowerX * 40 / 63) + 30 : 60,
       };

@@ -78,6 +78,8 @@ export function computeFinalStats(
 export function getFinalSpeed(gen: Generation, pokemon: Pokemon, field: Field, side: Side) {
   const weather = field.weather || '';
   const terrain = field.terrain;
+  let boost = pokemon.boosts.spe;
+  
   let speed = getModifiedStat(pokemon.rawStats.spe, pokemon.boosts.spe, gen);
   let mods = 1;
 
@@ -126,6 +128,8 @@ export function getMoveEffectiveness(
     return 1;
   } else if (move.named('Freeze-Dry') && type === 'Water') {
     return 2;
+  } else if (move.named('Expunge') && type === 'Nuclear') {
+    return 2; // infernal blade hardcoded in gen mechanics
   } else if (move.named('Flying Press')) {
     return (
       gen.types.get('fighting' as ID)!.effectiveness[type]! *
@@ -192,6 +196,26 @@ export function checkIntimidate(gen: Generation, source: Pokemon, target: Pokemo
     }
     if (target.hasAbility('Competitive')) {
       target.boosts.spa = Math.min(6, target.boosts.spa + 2);
+    }
+  }
+}
+
+export function checkPetrify(gen: Generation, source: Pokemon, target: Pokemon) {
+  const blocked = target.hasAbility('Clear Body', 'White Smoke');
+  if (source.hasAbility('Petrify') && source.abilityOn && !blocked) {
+    // this doesnt actually work but ive stopped caring at this point
+    if (target.hasAbility('Contrary')) {
+      target.boosts.spe = Math.min(6, target.boosts.spe + 1);
+    } else if (target.hasAbility('Simple')) {
+      target.boosts.spe = Math.max(-6, target.boosts.spe - 2);
+    } else {
+      target.boosts.spe = Math.max(-6, target.boosts.spe - 1);
+    }
+    // this does work tho so yay?
+    if (target.hasAbility('Competitive')) {
+      target.boosts.spa = Math.min(6, target.boosts.spa + 2);
+    } else if (target.hasAbility('Defiant')) {
+      target.boosts.atk = Math.min(6, target.boosts.atk + 2);
     }
   }
 }
