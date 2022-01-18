@@ -2080,6 +2080,7 @@ const XY_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Caustic Breath': {
     bp: 60,
     type: 'Dragon',
+    target: 'allAdjacentFoes',
     category: 'Special',
     secondaries: true,
   },
