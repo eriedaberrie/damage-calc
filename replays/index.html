@@ -22,7 +22,10 @@
               players: [splitdata[4], splitdata[5].slice(0, -5)],
               date: `${splitdata[1]}-${splitdata[2]}-${splitdata[3]}`
             });
-          } catch (e) {console.log(e);}
+          } catch (e) {
+            console.log('=== an error happened ===');
+            console.log(e);
+          }
         }
         
         let htmlString = '<br><br>'
@@ -31,7 +34,10 @@
           for (let replay of compileddata[format].sort((a, b) => {return (a.date < b.date) ? 1 : -1})) {
             try {
               htmlString += `<li><a href="${replay.file}">${replay.players[0]} vs ${replay.players[1]}&nbsp;&nbsp;${replay.date}</a></li>`;
-            } catch (e) {console.log(e);}
+            } catch (e) {
+              console.log('=== an error happened ===');
+              console.log(e);
+            }
           }
           htmlString += '</ul>';
         }
