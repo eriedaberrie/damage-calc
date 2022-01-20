@@ -14,20 +14,24 @@
         let compileddata = {};
         for (let file of data) {
           if (!file.name.endsWith('.html') || file.name === 'index.html') continue;
-          let splitdata = file.name.split("-")
-          if (!compileddata[splitdata[0]]) compileddata[splitdata[0]] = [];
-          compileddata[splitdata[0]].push({
-            file: file.name,
-            players: [splitdata[4], splitdata[5].slice(0, -5)],
-            date: `${splitdata[1]}-${splitdata[2]}-${splitdata[3]}`
-          });
+          try {
+            let splitdata = file.name.split("-")
+            if (!compileddata[splitdata[0]]) compileddata[splitdata[0]] = [];
+            compileddata[splitdata[0]].push({
+              file: file.name,
+              players: [splitdata[4], splitdata[5].slice(0, -5)],
+              date: `${splitdata[1]}-${splitdata[2]}-${splitdata[3]}`
+            });
+          } catch (e) {console.log(e);}
         }
         
         let htmlString = '<br><br>'
         for (let format in compileddata) {
           htmlString += format + '<ul>';
           for (let replay of compileddata[format].sort((a, b) => {return (a.date < b.date) ? 1 : -1})) {
-            htmlString += `<li><a href="${replay.file}">${replay.players[0]} vs ${replay.players[1]}&nbsp;&nbsp;${replay.date}</a></li>`;
+            try {
+              htmlString += `<li><a href="${replay.file}">${replay.players[0]} vs ${replay.players[1]}&nbsp;&nbsp;${replay.date}</a></li>`;
+            } catch (e) {console.log(e);}
           }
           htmlString += '</ul>';
         }
