@@ -23,8 +23,7 @@
           });
         }
         
-        htmlString = '<br><br>'
-        let formatnum = 0;
+        let htmlString = '<br><br>'
         for (let format in compileddata) {
           htmlString += format + '<ul>';
           for (let replay of compileddata[format].sort((a, b) => {return (a.date < b.date) ? 1 : -1})) {
