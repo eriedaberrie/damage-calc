@@ -128,7 +128,7 @@ export function getMoveEffectiveness(
     return 1;
   } else if (move.named('Freeze-Dry') && type === 'Water') {
     return 2;
-  } else if (move.named('Infernal Blade') && type === 'Fire') {
+  } else if (move.named('Infernal Blade') && type === 'Fairy') {
     return 4;
   } else if (move.named('Expunge') && type === 'Nuclear') {
     return 2;
