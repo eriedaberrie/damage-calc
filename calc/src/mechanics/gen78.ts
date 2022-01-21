@@ -247,7 +247,7 @@ export function calculateSMSS(
   const type2Effectiveness = defender.types[1]
     ? getMoveEffectiveness(gen, move, defender.types[1], isGhostRevealed, field.isGravity)
     : 1;
-  let typeEffectiveness = (move.named('Infernal Blade') && defender.hasType('Fairy')) ? 2 : type1Effectiveness * type2Effectiveness;
+  let typeEffectiveness = type1Effectiveness * type2Effectiveness;
 
   if (typeEffectiveness === 0 && move.named('Thousand Arrows')) {
     typeEffectiveness = 1;

@@ -128,8 +128,10 @@ export function getMoveEffectiveness(
     return 1;
   } else if (move.named('Freeze-Dry') && type === 'Water') {
     return 2;
+  } else if (move.named('Infernal Blade') && type === 'Fire') {
+    return 4;
   } else if (move.named('Expunge') && type === 'Nuclear') {
-    return 2; // infernal blade hardcoded in gen mechanics
+    return 2;
   } else if (move.named('Flying Press')) {
     return (
       gen.types.get('fighting' as ID)!.effectiveness[type]! *
