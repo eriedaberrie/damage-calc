@@ -1,3 +1,5 @@
+const { createImportSpecifier } = require("typescript");
+
 if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (searchElement, fromIndex) { // eslint-disable-line no-extend-native
 		var k;
@@ -498,7 +500,7 @@ $(".set-selector").change(function () {
 				setSelectValueIfValid(abilityObj, randset.abilities && randset.abilities[0], abilityFallback);
 				setSelectValueIfValid(itemObj, randset.items && randset.items[0], "");
 			} else {
-				setSelectValueIfValid(abilityObj, set.ability, abilityFallback);
+				setSelectValueIfValid(abilityObj, set.ability && pokemon.abilities[0], abilityFallback);
 				setSelectValueIfValid(itemObj, set.item, "");
 			}
 			var moves = randset ? selectMovesFromRandomOptions(randset.moves) : set.moves;
@@ -523,7 +525,7 @@ $(".set-selector").change(function () {
 				pokeObj.find("." + LEGACY_STATS[gen][i] + " .dvs").val(15);
 			}
 			pokeObj.find(".nature").val("Hardy");
-			setSelectValueIfValid(abilityObj, pokemon.ab, "");
+			setSelectValueIfValid(abilityObj, pokemon.abilities[0], "");
 			itemObj.val("");
 			for (i = 0; i < 4; i++) {
 				moveObj = pokeObj.find(".move" + (i + 1) + " select.move-selector");
