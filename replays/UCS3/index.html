@@ -23,6 +23,11 @@
     <br><br>
     <div id="replaytable"></div>
     <script>
+      let replaytable = document.getElementById("replaytable");
+      let htmlDefault = localStorage.getItem("ucs3replaytable");
+      if (htmlDefault) replaytable.innerHTML = htmlDefault;
+      
+    
       const nametable = {
         uraniumsceptile: "Omicron Owtens",
         caliphx: "Moki Magikarps",
@@ -60,6 +65,7 @@
                 break;
               default:
                 console.log(response);
+                usestorage = true; // might as well?
                 break;
             }
             if (breaknow || usestorage) break;
@@ -73,7 +79,7 @@
                   if (participants.length >= 2) break;
                 }
               }
-              replays[week].push([participants.join(" vs. "), `${week}/${file.name}`]);
+              replays[week].push([participants.join(" vs. "), `./${week}/${file.name}`]);
               curlen++;
             }
             if (curlen > maxweeklen) maxweeklen = curlen;
@@ -82,9 +88,7 @@
         
         let htmlString = "<table><tr>";
         
-        if (usestorage) {
-          htmlString = localStorage.getItem("ucs3replaytable");
-        } else {
+        if (!usestorage) {
           for (let week in replays) {
             htmlString += `<th>${week}</th>`;
           }
@@ -99,10 +103,9 @@
             htmlString += "</tr>";
           }
           htmlString += "</table>";
+          replaytable.innerHTML = htmlString;
+          localStorage.setItem("ucs3replaytable", htmlString);
         }
-        
-        document.getElementById("replaytable").innerHTML = htmlString;
-        if (!usestorage) localStorage.setItem("ucs3replaytable", htmlString);
       })();
     </script>
   <body>

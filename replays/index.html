@@ -9,9 +9,17 @@
     </big>
     <br><br>
     <big><big><big><a href="./UCS3">UCS Season 3 Replays</a></big></big></big>
+    <div></div>
     <script>
       (async () => {
+        let div0 = document.getElementsByTagName('div')[0];
+        let htmlDefault = localStorage.getItem("regreplaytable");
+        if (htmlDefault) div0.innerHTML = htmlDefault;
         const response = await fetch('https://api.github.com/repos/eriedaberrie/damage-calc/contents/replays/');
+        if (response.status !== 200) {
+          console.log(response);
+          return;
+        }
         let data = await response.json();
         let compileddata = {};
         for (let file of data) {
@@ -44,7 +52,8 @@
           htmlString += '</ul>';
         }
         
-        document.getElementsByTagName('body')[0].innerHTML += htmlString;
+        div0.innerHTML = htmlString;
+        localStorage.setItem("regreplaytable", htmlString);
       })();
     </script>
   <body>
