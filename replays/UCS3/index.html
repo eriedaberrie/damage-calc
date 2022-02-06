@@ -87,9 +87,9 @@
           } catch (e) {console.log(e, week)}
         }
         
-        let htmlString = "<table><tr>";
         
         if (!usestorage) {
+          let htmlString = "<table><tr>";
           for (let week in replays) {
             htmlString += `<th>${week}</th>`;
           }
