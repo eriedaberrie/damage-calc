@@ -479,6 +479,7 @@ $(".set-selector").change(function () {
 			$(this).closest('.poke-info').find(".ability-pool").hide();
 			$(this).closest('.poke-info').find(".item-pool").hide();
 		}
+		var abilityFallback = (typeof pokemon.abilities !== "undefined") ? pokemon.abilities[0] : "";
 		if (regSets || randset) {
 			var set = regSets ? correctHiddenPower(setdex[pokemonName][setName]) : randset;
 			pokeObj.find(".level").val(set.level);
@@ -495,12 +496,11 @@ $(".set-selector").change(function () {
 					(set.dvs && set.dvs[LEGACY_STATS[gen][i]] !== undefined) ? set.dvs[LEGACY_STATS[gen][i]] : 15);
 			}
 			setSelectValueIfValid(pokeObj.find(".nature"), set.nature, "Hardy");
-			var abilityFallback = (typeof pokemon.abilities !== "undefined") ? pokemon.abilities[0] : "";
 			if ($("#randoms").prop("checked")) {
 				setSelectValueIfValid(abilityObj, randset.abilities && randset.abilities[0], abilityFallback);
 				setSelectValueIfValid(itemObj, randset.items && randset.items[0], "");
 			} else {
-				setSelectValueIfValid(abilityObj, set.ability && pokemon.abilities[0], abilityFallback);
+				setSelectValueIfValid(abilityObj, set.ability, abilityFallback);
 				setSelectValueIfValid(itemObj, set.item, "");
 			}
 			var moves = randset ? selectMovesFromRandomOptions(randset.moves) : set.moves;
@@ -525,7 +525,7 @@ $(".set-selector").change(function () {
 				pokeObj.find("." + LEGACY_STATS[gen][i] + " .dvs").val(15);
 			}
 			pokeObj.find(".nature").val("Hardy");
-			setSelectValueIfValid(abilityObj, pokemon.abilities[0], "");
+			setSelectValueIfValid(abilityObj, pokemon.ab, abilityFallback);
 			itemObj.val("");
 			for (i = 0; i < 4; i++) {
 				moveObj = pokeObj.find(".move" + (i + 1) + " select.move-selector");
