@@ -26,6 +26,23 @@ var SETDEX_URANIUM = {
 			"evs": {"hp": 248, "df": 196, "sd": 64},
 			"moves": ["Substitute", "Baton Pass", "Roost", "Moonblast"]
 		}
+	},
+	"S51-A": {
+		"Gamma Specially Defensive": {
+			"level": 100,
+			"ability": "Levitate",
+			"item": "Leftovers",
+			"nature": "Calm",
+			"evs": {"hp": 252, "df": 4, "sd": 252},
+			"moves": ["Rapid Spin", "Recover", "U-Turn", "Flash Cannon"]
+	},
+		"Gamma Physically Defensive": {
+			"level": 100,
+			"ability": "Levitate",
+			"item": "Leftovers",
+			"nature": "Bold",
+			"evs": {"hp": 252, "df": 252, "sd": 4},
+			"moves": ["Rapid Spin", "Recover", "U-Turn", "Flash Cannon"]
 	}
 };
 
