@@ -44,6 +44,24 @@ var SETDEX_URANIUM = {
 			"evs": {"hp": 252, "df": 252, "sd": 4},
 			"moves": ["Rapid Spin", "Recover", "U-turn", "Flash Cannon"]
 		}
+	},
+	"S51-A-Mega": {
+		"Gamma Speed Demon": {
+			"level": 100,
+			"ability": "Mega Launcher",
+			"item": "Unidentified Fallen Object",
+			"nature": "Timid",
+			"evs": {"df": 4, "sa": 252, "sp": 252},
+			"moves": ["Flash Cannon", "Dark Pulse", "Focus Blast", "Nasty Plot"]
+		},
+		"Gamma Bulky Offense": {
+			"level": 100,
+			"ability": "Mega Launcher",
+			"item": "Unidentified Fallen Object",
+			"nature": "Bold",
+			"evs": {"hp": 240, "df": 116, "sp": 152},
+			"moves": ["Psychic", "Dark Pulse", "Focus Blast", "Nasty Plot"]
+		}
 	}
 };
 
